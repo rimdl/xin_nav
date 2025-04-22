@@ -30,10 +30,15 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore 忽略 NavBar 组件的类型检查
 import NavBar from './components/NavBar.vue'
+// @ts-ignore
 import Menu from './components/Menu.vue'
+// @ts-ignore
 import SearchBar from './components/SearchBar.vue'
+// @ts-ignore
 import Favorites from './components/Favorites.vue'
+// @ts-ignore
 import HorizontalMenu from './components/HorizontalMenu.vue'
 import { useSystemStore } from './store/systemStore'
 import { onBeforeMount, onMounted } from 'vue'

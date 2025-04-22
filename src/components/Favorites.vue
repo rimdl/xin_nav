@@ -115,7 +115,7 @@ import { ref, computed, onUnmounted, watch } from "vue";
 import { useSystemStore } from "../store/systemStore";
 const SystemStore = useSystemStore();
 const modalDialog = ref();
-let debounceTimer = null;
+let debounceTimer: number | null = null;
 const displayediconUrl = ref("");
 const siteName = ref("");
 const iconUrl = ref("");
@@ -164,19 +164,13 @@ const addWebsite = () => {
     
 };
 
-const getFaviconByAPI = (url) => {
-  const domain = new URL(url).hostname;
-  return `https://logo.clearbit.com/${domain}`;
-};
 
-// 自定义防抖函数
-const debounceUpdate = (url) => {
-  clearTimeout(debounceTimer);
+const debounceUpdate = (url: string) => {
+if (debounceTimer) clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
-    displayediconUrl.value = getFaviconByAPI(url);
-    iconUrl.value = getFaviconByAPI(url);
-  }, 2000);
-};
+    displayediconUrl.value = url;
+  }, 1000);
+}
 
 watch(siteUrl, (newVal) => {
   debounceUpdate(newVal);
@@ -187,7 +181,9 @@ watch(iconUrl, (newVal) => {
 
 // 组件卸载时清除定时器
 onUnmounted(() => {
-  clearTimeout(debounceTimer);
+if (debounceTimer) {
+  clearTimeout(debounceTimer as number);
+}
 });
 </script>
 

@@ -1,12 +1,53 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+// 删除未使用的导入
+// import { ref, watch } from 'vue'
 import { webdavService } from '../utils/webdavService';
+
+// 定义类型接口
+interface SearchEngine {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface SystemConfig {
+  openInNewTab: boolean;
+  defaultEngine: string;
+}
+
+interface Category {
+  name: string;
+  icon: string;
+}
+
+interface Favorite {
+  url: string;
+  name: string;
+  icon: string;
+  category: string;
+}
+
+interface WebDAVConfig {
+  url: string;
+  username: string;
+  password: string;
+  enabled: boolean;
+  lastSync: string | null;
+}
+
+interface AppConfig {
+  searchEngine: SearchEngine[];
+  systemConfig: SystemConfig;
+  categoryList: Category[];
+  favoriteList: Favorite[];
+  webdav: WebDAVConfig;
+}
 
 // 本地存储的键名
 const STORAGE_KEY = 'xin_nav_config'
 
 // 默认配置
-const defaultConfig = {
+const defaultConfig: AppConfig = {
   searchEngine: [
     {
       name: 'bing',
@@ -39,7 +80,7 @@ const defaultConfig = {
 }
 
 // 从localStorage读取配置，如果不存在则使用默认配置
-const loadConfigFromStorage = () => {
+const loadConfigFromStorage = (): AppConfig => {
   try {
     const storedConfig = localStorage.getItem(STORAGE_KEY)
     return storedConfig ? JSON.parse(storedConfig) : defaultConfig
@@ -58,36 +99,36 @@ export const useSystemStore = defineStore('system', {
   
   actions: {
     // 切换当前分类
-    changeNowCategory(category) {
+    changeNowCategory(category: string): void {
       this.nowCategory = category
     },
     
     // 添加收藏网站
-    addFavorite(favorite) {
+    addFavorite(favorite: Favorite): void {
       this.config.favoriteList.push(favorite)
       this.saveConfig() // 添加后自动保存
     },
     
     // 添加分类
-    addCategory(category) {
+    addCategory(category: Category): void {
       this.config.categoryList.push(category)
       this.saveConfig() // 添加后自动保存
     },
     
     // 设置默认搜索引擎
-    setDefaultEngine(engineName) {
+    setDefaultEngine(engineName: string): void {
       this.config.systemConfig.defaultEngine = engineName
       this.saveConfig() // 修改后自动保存
     },
     
     // 添加搜索引擎
-    addSearchEngine(engine) {
+    addSearchEngine(engine: SearchEngine): void {
       this.config.searchEngine.push(engine)
       this.saveConfig() // 添加后自动保存
     },
     
     // 保存配置到本地存储
-    saveConfig() {
+    saveConfig(): void {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.config))
         // 如果启用了 WebDAV 同步，则同步到 WebDAV
@@ -98,7 +139,7 @@ export const useSystemStore = defineStore('system', {
     },
     
     // 设置 WebDAV 配置
-    async setWebDAVConfig(url, username, password, enabled) {
+    async setWebDAVConfig(url: string, username: string, password: string, enabled: boolean): Promise<void> {
       // 保存当前的 WebDAV 配置
       this.config.webdav = {
         url,
@@ -129,7 +170,7 @@ export const useSystemStore = defineStore('system', {
                 const currentWebDAV = this.config.webdav
                 
                 // 更新本地配置
-                this.config = remoteConfig
+                this.config = remoteConfig as AppConfig
                 
                 // 恢复 WebDAV 配置
                 this.config.webdav = currentWebDAV
@@ -164,8 +205,8 @@ export const useSystemStore = defineStore('system', {
     },
     
     // 同步配置到 WebDAV
-    async syncToWebDAV() {
-      if (!this.config.webdav.enabled) return
+    async syncToWebDAV(): Promise<boolean> {
+      if (!this.config.webdav.enabled) return false
       
       this.isSyncing = true
       try {
@@ -185,15 +226,17 @@ export const useSystemStore = defineStore('system', {
           this.config.webdav.lastSync = new Date().toISOString()
           localStorage.setItem(STORAGE_KEY, JSON.stringify(this.config))
         }
+        return success
       } catch (error) {
         console.error('同步到 WebDAV 失败:', error)
+        return false
       } finally {
         this.isSyncing = false
       }
     },
     
     // 从 WebDAV 同步配置
-    async syncFromWebDAV() {
+    async syncFromWebDAV(): Promise<boolean> {
       if (!this.config.webdav.enabled) return false
       
       this.isSyncing = true
