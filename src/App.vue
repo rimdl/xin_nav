@@ -6,7 +6,7 @@
         <Menu />
       </div>
       
-      <div class="w-full pt-20 md:pl-20 md:pr-20 grow flex flex-col min-h-0"> 
+      <div class="w-full max-md:pt-70 md:pt-20 md:pl-20 md:pr-20 grow flex flex-col min-h-0"> 
         <div class="grow-0">
           <SearchBar />
         </div>

@@ -42,7 +42,7 @@
         v-model="searchText"
         @keyup.enter="search"
         placeholder="搜索..."
-        class="input input-bordered w-full bg-base-100/50 backdrop-blur-xl"
+        class="input input-bordered rounded-full w-full h-15 bg-base-100/50 backdrop-blur-xl"
       />
       
       <!-- 搜索按钮 -->
