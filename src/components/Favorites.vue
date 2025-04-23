@@ -83,7 +83,7 @@
             分类
             <input v-model="category" type="text" class="grow" placeholder="选择或输入" />
             <select v-model="categorySelect" class="bg-base-100/0 outline-0">
-              <option disabled selected>请选择</option>
+              <option selected>选择或输入</option>
               <option v-for="category in SystemStore.config.categoryList" :key="category.name">{{ category.name }}</option>
             </select>
           </label>
@@ -161,6 +161,7 @@ const addWebsite = () => {
     siteName.value = '';
     iconUrl.value = '';
     category.value = '';
+    categorySelect.value = '选择或输入'; // 添加这一行，重置下拉选择框的值
     
 };
 
