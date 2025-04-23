@@ -12,7 +12,8 @@
         v-for="(item, index) in SystemStore.config.categoryList"
         :key="index"
         @click="SystemStore.changeNowCategory(item.name)"
-        class="relative group"
+        class="relative group tooltip tooltip-right"
+        :data-tip="item.name"
       >
         <div
           class="avatar cursor-pointer"

@@ -8,8 +8,8 @@
       <input 
         type="text" 
         v-model="searchQuery" 
-        placeholder="搜索网站" 
-        class="input input-bordered w-24 md:w-auto" 
+        placeholder="搜索已保存的网站" 
+        class="input input-bordered w-24 md:w-auto rounded-full bg-base-100/50" 
         @input="searchSites"
         @focus="showResults = true"
         @blur="hideResultsDelayed"

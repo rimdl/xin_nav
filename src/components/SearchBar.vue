@@ -2,13 +2,13 @@
   <div class="flex flex-col items-center">
     <div class="flex items-center w-full max-w-3xl">
       <!-- 搜索引擎选择器 -->
-      <div class="dropdown dropdown-bottom">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+      <div class="dropdown dropdown-bottom bg-base-100/30 rounded-full">
+        <div tabindex="0" role="button" class="btn-xl btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
             <img :src="currentEngine.icon" alt="搜索引擎" />
           </div>
         </div>
-        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100/50 backdrop-blur-xl rounded-box w-52">
+        <ul tabindex="0" class="dropdown-content z-[10] menu p-2 shadow bg-base-100 backdrop-blur-xl rounded-box w-52">
           <li v-for="(engine, index) in SystemStore.config.searchEngine" :key="index">
             <a @click="changeEngine(engine)">
               <div class="flex items-center">
@@ -41,12 +41,12 @@
         type="text"
         v-model="searchText"
         @keyup.enter="search"
-        placeholder="搜索..."
-        class="input input-bordered rounded-full w-full h-15 bg-base-100/50 backdrop-blur-xl"
+        :placeholder="'使用'+currentEngine.name+'搜索...'"
+        class="ml-1 input input-bordered rounded-full w-full h-15 text-xl bg-base-100/50 backdrop-blur-xl"
       />
       
       <!-- 搜索按钮 -->
-      <button @click="search" class="btn btn-ghost btn-circle">
+      <button @click="search" class="btn btn-primary btn-xl ml-1 btn-circle">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
